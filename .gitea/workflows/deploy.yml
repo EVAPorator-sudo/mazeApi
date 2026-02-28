@@ -39,12 +39,15 @@ jobs:
             --build-arg JAR_FILE=build/libs/*.jar \
             -t mazeapi:latest .
 
-      - name: Stop any running container on port 8080
+      - name: Stop any existing container
         run: |
-          # Stop container if it exists
-          if docker ps -q -f name=mazeapi | grep -q .; then
+          # Stop and remove any container named 'mazeapi', running or exited
+          if docker ps -a -q -f name=mazeapi | grep -q .; then
             docker rm -f mazeapi
+            echo "Removed existing container 'mazeapi'"
           fi
+          # Optional extra safety: give Docker time to free the port
+          sleep 2
 
       - name: Run new container
         run: |
