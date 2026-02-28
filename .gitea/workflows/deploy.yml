@@ -17,7 +17,7 @@ jobs:
       - name: Prepare environment
         run: |
           apt update
-          apt install -y git docker.io
+          apt install -y git docker.io lsof
 
       - name: Clone repository
         run: |
@@ -39,21 +39,28 @@ jobs:
             --build-arg JAR_FILE=build/libs/*.jar \
             -t mazeapi:latest .
 
-      - name: Stop any existing container
+      - name: Stop any running container and free port
         run: |
-          # Stop and remove any container named 'mazeapi', running or exited
+          # Stop and remove any container named 'mazeapi'
           if docker ps -a -q -f name=mazeapi | grep -q .; then
             docker rm -f mazeapi
             echo "Removed existing container 'mazeapi'"
           fi
-          # Optional extra safety: give Docker time to free the port
+
+          # Kill any process still holding the host port
+          if lsof -i :808; then
+            echo "Port 808 still in use, killing processes..."
+            fuser -k 808/tcp
+          fi
+
+          # Wait a moment to ensure Docker and the host free the port
           sleep 2
 
       - name: Run new container
         run: |
           docker run -d \
             --name mazeapi \
-            -p 8080:8080 \
+            -p 808:8080 \
             mazeapi:latest
 
       - name: Show container logs
