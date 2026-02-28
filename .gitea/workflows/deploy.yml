@@ -24,7 +24,7 @@ jobs:
           git clone http://gitea:3000/Jevadmin/mazeApi.git .
           git checkout $GITHUB_SHA
 
-      - name: Verify Java
+      - name: Verify Java version
         run: java -version
 
       - name: Make Gradle executable
