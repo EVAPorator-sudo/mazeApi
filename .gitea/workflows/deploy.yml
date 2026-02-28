@@ -1,4 +1,4 @@
-name: Deploy springboot application
+name: Deploy Spring Boot Application
 
 on:
   push:
@@ -39,9 +39,12 @@ jobs:
             --build-arg JAR_FILE=build/libs/*.jar \
             -t mazeapi:latest .
 
-      - name: Stop existing container
+      - name: Stop any running container on port 8080
         run: |
-          docker rm -f mazeapi || true
+          # Stop container if it exists
+          if docker ps -q -f name=mazeapi | grep -q .; then
+            docker rm -f mazeapi
+          fi
 
       - name: Run new container
         run: |
