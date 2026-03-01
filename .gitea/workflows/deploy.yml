@@ -18,10 +18,11 @@ jobs:
         run: |
           apt update
           apt install -y git docker.io lsof
-          rm -rf ./*
+          rm -rf /workdir/*
 
       - name: Clone repository
         run: |
+          cd /workdir
           git clone http://gitea:3000/Jevadmin/mazeApi.git .
           git checkout $GITHUB_SHA
 
