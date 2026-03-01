@@ -45,11 +45,7 @@ jobs:
         working-directory: /workdir/mazeApi
 
       - name: Build Docker image
-        run: |
-          docker build \
-            --build-arg JAR_FILE=/workdir/mazeApi/build/libs/*.jar \
-            -t mazeapi:latest 
-            /workdir/mazeApi
+        run: docker build -t mazeapi:latest /workdir/mazeApi
         working-directory: /workdir/mazeApi
 
       - name: Stop any running container and free port
