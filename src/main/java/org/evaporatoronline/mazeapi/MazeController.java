@@ -22,7 +22,7 @@ public class MazeController {
         return "Welcome to the MazeApi !";
     }
 
-    @GetMapping(value = "/maze")
+    @GetMapping(value = "/generate")
     public ResponseEntity<?> MazeImage(HttpServletResponse httpServletResponse,
                           @RequestParam int Length, @RequestParam int Height,
                           @RequestParam int Weight, @RequestParam String Algorithm) throws IOException {

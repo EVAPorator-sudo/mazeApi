@@ -23,7 +23,7 @@ class MazeApiApplicationTests {
         List<String> testCases = List.of("5", "10", "100", "500", "1000");
 
         for(String testCase: testCases){
-            mockMvc.perform(get("/maze")
+            mockMvc.perform(get("/generate")
                             .param("Length", testCase)
                             .param("Height", "10")
                             .param("Algorithm", "GrowingTree")
@@ -38,7 +38,7 @@ class MazeApiApplicationTests {
         List<String> testCases = List.of("5", "10", "100", "500", "1000");
 
         for(String testCase: testCases){
-            mockMvc.perform(get("/maze")
+            mockMvc.perform(get("/generate")
                             .param("Length", "10")
                             .param("Height", testCase)
                             .param("Algorithm", "GrowingTree")
@@ -50,7 +50,7 @@ class MazeApiApplicationTests {
 
     @Test
     void testCorrectAlgorithm() throws Exception{
-        mockMvc.perform(get("/maze")
+        mockMvc.perform(get("/generate")
                         .param("Length", "10")
                         .param("Height", "10")
                         .param("Algorithm", "Eller's")
@@ -58,7 +58,7 @@ class MazeApiApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("image/png"));
 
-        mockMvc.perform(get("/maze")
+        mockMvc.perform(get("/generate")
                         .param("Length", "10")
                         .param("Height", "10")
                         .param("Algorithm", "GrowingTree")
@@ -74,7 +74,7 @@ class MazeApiApplicationTests {
         List<String> testCases = List.of("4", "-5", "1001", "10000");
 
         for(String testCase: testCases){
-            mockMvc.perform(get("/maze")
+            mockMvc.perform(get("/generate")
                             .param("Length", testCase)
                             .param("Height", "10")
                             .param("Algorithm", "GrowingTree")
@@ -89,7 +89,7 @@ class MazeApiApplicationTests {
         List<String> testCases = List.of("4", "-5", "1001", "10000");
 
         for(String testCase: testCases){
-            mockMvc.perform(get("/maze")
+            mockMvc.perform(get("/generate")
                             .param("Length", "10")
                             .param("Height", testCase)
                             .param("Algorithm", "GrowingTree")
@@ -101,7 +101,7 @@ class MazeApiApplicationTests {
 
     @Test
     void testInvalidAlgorithm() throws Exception{
-        mockMvc.perform(get("/maze")
+        mockMvc.perform(get("/generate")
                         .param("Length", "10")
                         .param("Height", "10")
                         .param("Algorithm", "FakeAlgorithm")
