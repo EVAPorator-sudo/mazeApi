@@ -30,6 +30,15 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
+      - name: Run unit and integration tests
+        run: |
+          ./gradlew test --info
+        continue-on-error: false
+
+      - name: Return test reports
+        run: |
+          ls -l build/reports/tests/test
+
       - name: Build Spring Boot JAR
         run: ./gradlew clean bootJar
 
@@ -41,19 +50,16 @@ jobs:
 
       - name: Stop any running container and free port
         run: |
-          # Stop and remove any container named 'mazeapi'
           if docker ps -a -q -f name=mazeapi | grep -q .; then
             docker rm -f mazeapi
             echo "Removed existing container 'mazeapi'"
           fi
 
-          # Kill any process still holding the host port
           if lsof -i :808; then
             echo "Port 808 still in use, killing processes..."
             fuser -k 808/tcp
           fi
 
-          # Wait a moment to ensure Docker and the host free the port
           sleep 2
 
       - name: Run new container
