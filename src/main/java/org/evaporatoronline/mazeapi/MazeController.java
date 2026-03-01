@@ -33,7 +33,7 @@ public class MazeController {
         }
 
         if (Height < 5 || Height > 1000){
-            return ResponseEntity.badRequest().body(Map.of("message", "Invalid Width parameter"));
+            return ResponseEntity.badRequest().body(Map.of("message", "Invalid Height parameter"));
         }
 
         if (Weight < 0 || Weight > 100){

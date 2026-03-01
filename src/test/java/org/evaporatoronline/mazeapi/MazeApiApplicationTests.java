@@ -25,7 +25,7 @@ class MazeApiApplicationTests {
         for(String testCase: testCases){
             mockMvc.perform(get("/maze")
                             .param("Length", testCase)
-                            .param("Width", "10")
+                            .param("Height", "10")
                             .param("Algorithm", "GrowingTree")
                             .param("Weight", "50"))
                     .andExpect(status().isOk())
@@ -34,13 +34,13 @@ class MazeApiApplicationTests {
     }
 
     @Test
-    void testCorrectWidth() throws Exception{
+    void testCorrectHeight() throws Exception{
         List<String> testCases = List.of("5", "10", "100", "500", "1000");
 
         for(String testCase: testCases){
             mockMvc.perform(get("/maze")
                             .param("Length", "10")
-                            .param("Width", testCase)
+                            .param("Height", testCase)
                             .param("Algorithm", "GrowingTree")
                             .param("Weight", "50"))
                     .andExpect(status().isOk())
@@ -52,7 +52,7 @@ class MazeApiApplicationTests {
     void testCorrectAlgorithm() throws Exception{
         mockMvc.perform(get("/maze")
                         .param("Length", "10")
-                        .param("Width", "10")
+                        .param("Height", "10")
                         .param("Algorithm", "Eller's")
                         .param("Weight", "50"))
                 .andExpect(status().isOk())
@@ -60,7 +60,7 @@ class MazeApiApplicationTests {
 
         mockMvc.perform(get("/maze")
                         .param("Length", "10")
-                        .param("Width", "10")
+                        .param("Height", "10")
                         .param("Algorithm", "GrowingTree")
                         .param("Weight", "50"))
                 .andExpect(status().isOk())
@@ -76,7 +76,7 @@ class MazeApiApplicationTests {
         for(String testCase: testCases){
             mockMvc.perform(get("/maze")
                             .param("Length", testCase)
-                            .param("Width", "10")
+                            .param("Height", "10")
                             .param("Algorithm", "GrowingTree")
                             .param("Weight", "50"))
                     .andExpect(status().isBadRequest())
@@ -85,17 +85,17 @@ class MazeApiApplicationTests {
     }
 
     @Test
-    void testInvalidWidth() throws Exception{
+    void testInvalidHeight() throws Exception{
         List<String> testCases = List.of("4", "-5", "1001", "10000");
 
         for(String testCase: testCases){
             mockMvc.perform(get("/maze")
                             .param("Length", "10")
-                            .param("Width", testCase)
+                            .param("Height", testCase)
                             .param("Algorithm", "GrowingTree")
                             .param("Weight", "50"))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.message").value("Invalid Width parameter"));
+                    .andExpect(jsonPath("$.message").value("Invalid Height parameter"));
         }
     }
 
@@ -103,7 +103,7 @@ class MazeApiApplicationTests {
     void testInvalidAlgorithm() throws Exception{
         mockMvc.perform(get("/maze")
                         .param("Length", "10")
-                        .param("Width", "10")
+                        .param("Height", "10")
                         .param("Algorithm", "FakeAlgorithm")
                         .param("Weight", "50"))
                 .andExpect(status().isBadRequest())
