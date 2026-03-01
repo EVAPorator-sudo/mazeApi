@@ -5,12 +5,15 @@ import mazeGenerator.Draw;
 import mazeGenerator.Generator;
 import mazeGenerator.Grid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -21,35 +24,38 @@ public class MazeController {
         return "Welcome to the MazeApi !";
     }
 
-    @GetMapping(value = "/maze", produces = "image/png")
-    public void MazeImage(HttpServletResponse httpServletResponse,
+    @GetMapping(value = "/maze")
+    public ResponseEntity<?> MazeImage(HttpServletResponse httpServletResponse,
                           @RequestParam int Length, @RequestParam int Width,
                           @RequestParam int Weight, @RequestParam String Algorithm) throws IOException {
 
 
         if (Length < 5 || Length > 1000){
-            throw new InvalidMazeParameterException("Invalid Length parameter");
+            return ResponseEntity.badRequest().body(Map.of("message", "Invalid Length parameter"));
         }
 
         if (Width < 5 || Width > 1000){
-            throw new InvalidMazeParameterException("Invalid Width parameter");
+            return ResponseEntity.badRequest().body(Map.of("message", "Invalid Width parameter"));
         }
 
         if (Weight < 0 || Weight > 100){
-            throw new InvalidMazeParameterException("Invalid Weight parameter");
+            return ResponseEntity.badRequest().body(Map.of("message", "Invalid Weight parameter"));
         }
 
         Grid grid = new Grid(Length, Width);
 
-        switch (Algorithm){
+        switch (Algorithm) {
             case "Eller's" -> Generator.Ellers(grid);
             case "GrowingTree" -> Generator.growingTree(grid, Weight);
-            default -> throw new InvalidMazeParameterException("Invalid Algorithm parameter");
+            default -> {
+                return ResponseEntity.badRequest().body(Map.of("message", "Invalid Algorithm parameter"));
+            }
         }
-
         BufferedImage mazeImage = Draw.gridDraw(grid);
-        httpServletResponse.setContentType("image/png");
-        ImageIO.write(mazeImage, "png", httpServletResponse.getOutputStream());
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ImageIO.write(mazeImage, "png", output);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(output.toByteArray());
     }
 
 }
