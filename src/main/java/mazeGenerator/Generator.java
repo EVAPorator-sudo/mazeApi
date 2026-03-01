@@ -13,7 +13,7 @@ public class Generator {
      * @param grid initialised grid
      * @return maze grid
      */
-    public static Grid Ellers(Grid grid) {
+    public static void Ellers(Grid grid) {
         Random random = new Random();
         for (Row row : grid.getList().subList(0, grid.getHeight())) {
             for (Cell cell : row.getList()) {
@@ -59,7 +59,6 @@ public class Generator {
         for (Cell cell : lastRow) {
             grid.Merge(cell, 2);
         }
-        return grid;
     }
 
     /**
@@ -69,7 +68,7 @@ public class Generator {
      * @param Weighting weighting between recursive backtracking and Primm's
      * @return maze grid
      */
-    public static Grid growingTree(Grid grid, double Weighting) {
+    public static void growingTree(Grid grid, double Weighting) {
         Random random = new Random();
         ArrayList<Cell> activeList = new ArrayList<>();
         HashSet<Cell> visited = new HashSet<>();
@@ -108,6 +107,5 @@ public class Generator {
                 }
             }
         }
-        return grid;
     }
 }

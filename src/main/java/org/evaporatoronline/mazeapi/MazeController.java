@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import mazeGenerator.Draw;
 import mazeGenerator.Generator;
 import mazeGenerator.Grid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +13,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 public class MazeController {
@@ -26,7 +24,7 @@ public class MazeController {
 
     @GetMapping(value = "/maze")
     public ResponseEntity<?> MazeImage(HttpServletResponse httpServletResponse,
-                          @RequestParam int Length, @RequestParam int Width,
+                          @RequestParam int Length, @RequestParam int Height,
                           @RequestParam int Weight, @RequestParam String Algorithm) throws IOException {
 
 
@@ -34,7 +32,7 @@ public class MazeController {
             return ResponseEntity.badRequest().body(Map.of("message", "Invalid Length parameter"));
         }
 
-        if (Width < 5 || Width > 1000){
+        if (Height < 5 || Height > 1000){
             return ResponseEntity.badRequest().body(Map.of("message", "Invalid Width parameter"));
         }
 
@@ -42,7 +40,7 @@ public class MazeController {
             return ResponseEntity.badRequest().body(Map.of("message", "Invalid Weight parameter"));
         }
 
-        Grid grid = new Grid(Length, Width);
+        Grid grid = new Grid(Length, Height);
 
         switch (Algorithm) {
             case "Eller's" -> Generator.Ellers(grid);
