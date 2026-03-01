@@ -25,7 +25,7 @@ public class MazeController {
         return "Welcome to the MazeApi !";
     }
 
-    @GetMapping(value = "/Maze", produces = "image/png")
+    @GetMapping(value = "/maze", produces = "image/png")
     public void MazeImage(HttpServletResponse httpServletResponse,
                           @RequestParam int Length, @RequestParam int Width,
                           @RequestParam int Weight, @RequestParam String Algorithm) throws IOException {
