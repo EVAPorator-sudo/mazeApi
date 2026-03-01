@@ -78,15 +78,18 @@ public class Generator {
         activeList.add(grid.getCell(new int[]{randomX, randomY}));
         while (!activeList.isEmpty()) {
             Cell activeCell;
+            int activeIndex;
             if (random.nextInt(100) < Weighting && activeList.size() > 1) {
-                activeCell = activeList.get(random.nextInt(activeList.size()));
+                activeIndex = random.nextInt(activeList.size());
+                activeCell = activeList.get(activeIndex);
             } else {
-                activeCell = activeList.getLast();
+                activeIndex = activeList.size() -1;
+                activeCell = activeList.get(activeIndex);
 
             }
             visited.add(activeCell);
             ArrayList<Integer> neighbours = grid.findNeighbours(activeCell, visited);
-            if (neighbours.isEmpty()) activeList.remove(activeCell);
+            if (neighbours.isEmpty()) activeList.remove(activeIndex);
             else if (neighbours.size() == 1) {
                 int direction = neighbours.getFirst();
                 Cell neighbour = grid.findCell(activeCell, direction);
