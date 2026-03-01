@@ -64,6 +64,7 @@ jobs:
         run: |
           docker run -d \
             --name mazeapi \
+            --network code-stack_gitea \
             -p 808:8080 \
             mazeapi:latest
 
