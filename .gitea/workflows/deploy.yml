@@ -16,33 +16,40 @@ jobs:
     steps:
       - name: Prepare environment
         run: |
+          mkdir -p /workdir/mazeApi
+          rm -rf /workdir/mazeApi/*
           apt update
           apt install -y git docker.io lsof
-          rm -rf ./*
 
       - name: Clone repository
         run: |
-          git clone http://gitea:3000/Jevadmin/mazeApi.git .
+          git clone http://gitea:3000/Jevadmin/mazeApi.git /workdir/mazeApi
+          cd /workdir/mazeApi
           git checkout $GITHUB_SHA
 
       - name: Verify Java version
         run: java -version
+        working-directory: /workdir/mazeApi
 
       - name: Make Gradle executable
         run: chmod +x ./gradlew
+        working-directory: /workdir/mazeApi
 
       - name: Run unit and integration tests
         run: ./gradlew test --info
+        working-directory: /workdir/mazeApi
         continue-on-error: false
 
       - name: Build Spring Boot JAR
         run: ./gradlew clean bootJar
+        working-directory: /workdir/mazeApi
 
       - name: Build Docker image
         run: |
           docker build \
-            --build-arg JAR_FILE=build/libs/*.jar \
+            --build-arg JAR_FILE=/workdir/mazeApi/build/libs/*.jar \
             -t mazeapi:latest .
+        working-directory: /workdir/mazeApi
 
       - name: Stop any running container and free port
         run: |
@@ -67,4 +74,4 @@ jobs:
         run: docker logs --tail=100 mazeapi
 
       - name: Clean workspace
-        run: rm -rf ./*
+        run: rm -rf /workdir/mazeApi/*
