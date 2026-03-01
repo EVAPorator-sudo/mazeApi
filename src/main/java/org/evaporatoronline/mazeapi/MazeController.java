@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import mazeGenerator.Draw;
 import mazeGenerator.Generator;
 import mazeGenerator.Grid;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
+@CrossOrigin(origins = {"https://www.evaporatoronline.org",
+        "http://localhost:3000",
+        "http://docker:808"})
 @RestController
 public class MazeController {
 
