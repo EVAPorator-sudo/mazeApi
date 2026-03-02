@@ -1,9 +1,6 @@
 package org.evaporatoronline.mazeapi;
 
-import jakarta.servlet.http.HttpServletResponse;
-import mazeGenerator.Draw;
-import mazeGenerator.Generator;
-import mazeGenerator.Grid;
+import mazeGenerator.*;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,6 +15,7 @@ import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
@@ -36,7 +34,6 @@ public class MazeController {
     })
     @GetMapping(value = "/generate")
     public ResponseEntity<?> MazeImage(
-            HttpServletResponse httpServletResponse,
             @RequestParam int Length,
             @RequestParam int Height,
             @RequestParam int Weight,
@@ -102,6 +99,82 @@ public class MazeController {
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_PNG)
                 .body(output.toByteArray());
+    }
+
+    @CrossOrigin(origins = {"https://evaporatoronline.org/solve",
+            "http://docker:808/solve",
+            "http://localhost:8080/solve"})
+    @GetMapping("/solve")
+    public ResponseEntity<?> MazeSolve(@RequestParam String ID, @RequestParam String Start,
+                                       @RequestParam String End, @RequestParam String Algorithm) throws IOException {
+        String[] splitID = ID.split("/[-]");
+        String[] splitStartCoords = Start.split("/[-]");
+        String[] splitEndCoords = End.split("/[-]");
+
+        int Length;
+        int Height;
+        int Weight;
+        String genAlgorithm;
+        long seed;
+        int[] StartCoords;
+        int[] EndCoords;
+
+
+        try {
+            Length = Integer.parseInt(splitID[0]);
+            Height = Integer.parseInt(splitID[1]);
+            Weight = Integer.parseInt(splitID[2]);
+            genAlgorithm = splitID[3];
+            seed = Long.parseLong(splitID[4]);
+            StartCoords = new int[]{Integer.parseInt(splitStartCoords[0]),
+                    Integer.parseInt(splitStartCoords[1])};
+            EndCoords = new int[]{Integer.parseInt(splitEndCoords[0]),
+                    Integer.parseInt(splitEndCoords[1])};
+
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (splitID.length != 5) {
+            ResponseEntity.badRequest().body(Map.of("message", "Invalid ID parameter"));
+        } else if (Length < 5 || Length > 1000) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Invalid Length parameter"));
+        } else if (Height < 5 || Height > 1000) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Invalid Height parameter"));
+        } else if (Weight < 0 || Weight > 100) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Invalid Weight parameter"));
+        } else if (StartCoords[0] < Length - 1 || StartCoords[1] < Height - 1) {
+
+        }
+
+        Grid grid = new Grid(Length, Height);
+
+        switch (genAlgorithm) {
+            case "Eller's" -> Generator.Ellers(grid, seed);
+            case "GrowingTree" -> Generator.growingTree(grid, Weight, seed);
+            default -> {
+                return ResponseEntity.badRequest().body(Map.of("message", "Invalid Algorithm parameter"));
+            }
+        }
+
+        ArrayList<Cell> path;
+        Cell start = grid.getCell(StartCoords);
+        Cell end = grid.getCell(EndCoords);
+
+
+        switch (Algorithm) {
+            case "Dijkstra's" -> path = Solver.Dijkstras(start, end, grid);
+            case "A*" -> path = Solver.A(start, end, grid);
+            default -> {
+                return ResponseEntity.badRequest().body(Map.of("message", "Invalid Algorithm parameter"));
+            }
+        }
+
+        BufferedImage solveImage = Draw.solveDraw(grid, path);
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ImageIO.write(solveImage, "png", output);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(output.toByteArray());
     }
 
     private void addMetadata(IIOMetadataNode root, String key, String value) {
