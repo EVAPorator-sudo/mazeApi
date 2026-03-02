@@ -40,7 +40,8 @@ public class MazeController {
             @RequestParam int Length,
             @RequestParam int Height,
             @RequestParam int Weight,
-            @RequestParam String Algorithm
+            @RequestParam String Algorithm,
+            @RequestParam(name = "_", required = false) String cacheFiller
     ) throws IOException {
 
         if (Length < 5 || Length > 1000) {
