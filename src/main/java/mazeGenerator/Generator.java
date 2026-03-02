@@ -13,8 +13,8 @@ public class Generator {
      * @param grid initialised grid
      * @return maze grid
      */
-    public static void Ellers(Grid grid) {
-        Random random = new Random();
+    public static void Ellers(Grid grid, long randomSeed) {
+        Random random = new Random(randomSeed);
         for (Row row : grid.getList().subList(0, grid.getHeight())) {
             for (Cell cell : row.getList()) {
                 if (random.nextBoolean() && cell.getPosition()[0] != 0) {
@@ -68,8 +68,8 @@ public class Generator {
      * @param Weighting weighting between recursive backtracking and Primm's
      * @return maze grid
      */
-    public static void growingTree(Grid grid, double Weighting) {
-        Random random = new Random();
+    public static void growingTree(Grid grid, double Weighting, long randomSeed) {
+        Random random = new Random(randomSeed);
         ArrayList<Cell> activeList = new ArrayList<>();
         HashSet<Cell> visited = new HashSet<>();
         int randomX = random.nextInt(0, grid.getLength());
@@ -82,7 +82,7 @@ public class Generator {
                 activeIndex = random.nextInt(activeList.size());
                 activeCell = activeList.get(activeIndex);
             } else {
-                activeIndex = activeList.size() -1;
+                activeIndex = activeList.size() - 1;
                 activeCell = activeList.get(activeIndex);
 
             }

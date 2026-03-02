@@ -19,10 +19,10 @@ class MazeApiApplicationTests {
     private MockMvc mockMvc;
 
     @Test
-    void testCorrectLength() throws Exception{
+    void testCorrectLength() throws Exception {
         List<String> testCases = List.of("5", "10", "100", "500", "1000");
 
-        for(String testCase: testCases){
+        for (String testCase : testCases) {
             mockMvc.perform(get("/generate")
                             .param("Length", testCase)
                             .param("Height", "10")
@@ -34,10 +34,10 @@ class MazeApiApplicationTests {
     }
 
     @Test
-    void testCorrectHeight() throws Exception{
+    void testCorrectHeight() throws Exception {
         List<String> testCases = List.of("5", "10", "100", "500", "1000");
 
-        for(String testCase: testCases){
+        for (String testCase : testCases) {
             mockMvc.perform(get("/generate")
                             .param("Length", "10")
                             .param("Height", testCase)
@@ -49,7 +49,7 @@ class MazeApiApplicationTests {
     }
 
     @Test
-    void testCorrectAlgorithm() throws Exception{
+    void testCorrectAlgorithm() throws Exception {
         mockMvc.perform(get("/generate")
                         .param("Length", "10")
                         .param("Height", "10")
@@ -70,10 +70,10 @@ class MazeApiApplicationTests {
     }
 
     @Test
-    void testInvalidLength() throws Exception{
+    void testInvalidLength() throws Exception {
         List<String> testCases = List.of("4", "-5", "1001", "10000");
 
-        for(String testCase: testCases){
+        for (String testCase : testCases) {
             mockMvc.perform(get("/generate")
                             .param("Length", testCase)
                             .param("Height", "10")
@@ -85,10 +85,10 @@ class MazeApiApplicationTests {
     }
 
     @Test
-    void testInvalidHeight() throws Exception{
+    void testInvalidHeight() throws Exception {
         List<String> testCases = List.of("4", "-5", "1001", "10000");
 
-        for(String testCase: testCases){
+        for (String testCase : testCases) {
             mockMvc.perform(get("/generate")
                             .param("Length", "10")
                             .param("Height", testCase)
@@ -100,7 +100,7 @@ class MazeApiApplicationTests {
     }
 
     @Test
-    void testInvalidAlgorithm() throws Exception{
+    void testInvalidAlgorithm() throws Exception {
         mockMvc.perform(get("/generate")
                         .param("Length", "10")
                         .param("Height", "10")
