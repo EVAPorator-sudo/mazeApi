@@ -6,6 +6,7 @@ import mazeGenerator.Generator;
 import mazeGenerator.Grid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +29,11 @@ public class MazeController {
         return "Welcome to the MazeApi !";
     }
 
+    @CrossOrigin(originPatterns = {
+            "https://evaporatoronline.org",
+            "http://docker:808",
+            "http://localhost:8080"
+    })
     @GetMapping(value = "/generate")
     public ResponseEntity<?> MazeImage(
             HttpServletResponse httpServletResponse,
