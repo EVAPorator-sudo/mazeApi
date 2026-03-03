@@ -4,7 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
@@ -111,4 +114,25 @@ class MazeApiApplicationTests {
 
     }
 
+    @Test
+    void testSolve() throws Exception {
+        MvcResult generateResult = mockMvc.perform(MockMvcRequestBuilders.get("/generate")
+                        .param("Length", "10")
+                        .param("Height", "10")
+                        .param("Weight", "10")
+                        .param("Algorithm", "Eller's"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.IMAGE_PNG))
+                .andReturn();
+
+        byte[] generatedMazeBytes = generateResult.getResponse().getContentAsByteArray();
+
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/solve")
+                        .file("image", generatedMazeBytes)
+                        .param("Start", "0-0")
+                        .param("End", "9-9")
+                        .param("Algorithm", "A*"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.IMAGE_PNG));
+    }
 }
