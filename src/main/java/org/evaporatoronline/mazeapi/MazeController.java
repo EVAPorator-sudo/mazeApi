@@ -80,7 +80,8 @@ public class MazeController {
 
     @CrossOrigin(origins = {"https://evaporatoronline.org/solve",
             "http://docker:808/solve",
-            "http://localhost:8080/solve"})
+            "http://localhost:8080/solve",
+            "http://127.0.0.1:8080/solve"})
     @PostMapping(value = "/solve", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> MazeSolve(@RequestParam("image") MultipartFile image, @RequestParam String Start,
                                        @RequestParam String End, @RequestParam String Algorithm) throws IOException {
