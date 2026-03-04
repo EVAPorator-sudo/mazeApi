@@ -24,9 +24,9 @@ public class MazeController {
     }
 
     @CrossOrigin(originPatterns = {
-            "https://evaporatoronline.org",
-            "http://docker:808",
-            "http://localhost:8080"
+            "https://evaporatoronline.org/generate",
+            "http://docker:808/generate",
+            "http://localhost:8080/generate"
     })
     @GetMapping(value = "/generate")
     public ResponseEntity<?> MazeImage(
@@ -78,9 +78,9 @@ public class MazeController {
                 .body(output.toByteArray());
     }
 
-    @CrossOrigin(origins = {"https://evaporatoronline.org",
-            "http://docker:808",
-            "http://localhost:8080"})
+    @CrossOrigin(origins = {"https://evaporatoronline.org/solve",
+            "http://docker:808/solve",
+            "http://localhost:8080/solve"})
     @PostMapping(value = "/solve", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> MazeSolve(@RequestParam("image") MultipartFile image, @RequestParam String Start,
                                        @RequestParam String End, @RequestParam String Algorithm) throws IOException {
