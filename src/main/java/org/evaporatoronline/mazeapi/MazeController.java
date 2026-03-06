@@ -1,6 +1,7 @@
 package org.evaporatoronline.mazeapi;
 
 import mazeGenerator.*;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,10 +11,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @RestController
 public class MazeController {
@@ -74,7 +72,10 @@ public class MazeController {
 
         ByteArrayOutputStream output = imageManipulator.addMetaData(MetaData, mazeImage);
 
+        String filename = "maze-" + (new Date().getDate());
+
         return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"generated" + filename + "\"")
                 .contentType(MediaType.IMAGE_PNG)
                 .body(output.toByteArray());
     }
@@ -176,8 +177,13 @@ public class MazeController {
 
         BufferedImage solveImage = Draw.solveDraw(grid, path);
 
+        String filename = "maze-" + (new Date().getDate());
+
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         ImageIO.write(solveImage, "png", output);
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(output.toByteArray());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"solved" + filename + "\"")
+                .contentType(MediaType.IMAGE_PNG)
+                .body(output.toByteArray());
     }
 }
