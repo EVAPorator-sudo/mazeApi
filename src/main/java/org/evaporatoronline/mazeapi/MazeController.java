@@ -187,4 +187,36 @@ public class MazeController {
                 .contentType(MediaType.IMAGE_PNG)
                 .body(output.toByteArray());
     }
+
+    @CrossOrigin(origins = {
+            "https://evaporatoronline.org",
+            "http://docker:808",
+            "http://localhost:8080",
+            "http://127.0.0.1:5500"})
+    @GetMapping(value = "/background")
+    public ResponseEntity<?> backgroundGen(
+            @RequestParam int screenWidth,
+            @RequestParam int screenHeight
+            ) throws IOException {
+        Random random = new Random();
+
+        int wallthickness = 1;
+        int cellthickness = 20;
+        long seed = random.nextLong();
+
+        int mazeLength = (screenWidth - 2 * wallthickness) / cellthickness;
+        int mazeHeight = (screenHeight - 2 * wallthickness) / cellthickness;
+
+        Grid grid = new Grid(mazeLength, mazeHeight);
+        Generator.growingTree(grid, 80, seed);
+        ArrayList<Cell> path = Solver.A(grid.getCell(new int[]{0, 0}),grid.getCell(new int[]{mazeLength -1, mazeHeight -1}), grid);
+        BufferedImage image = Draw.solveDraw(grid, path);
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", output);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .body(output.toByteArray());
+    }
 }
