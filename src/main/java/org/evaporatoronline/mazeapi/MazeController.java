@@ -23,7 +23,8 @@ public class MazeController {
 
     @CrossOrigin(originPatterns = {
             "https://evaporatoronline.org",
-            "http://docker:808",
+            "http://docker:80",
+            "http://docker:81",
             "http://localhost:8080",
             "http://127.0.0.1:5500"
     })
@@ -82,7 +83,8 @@ public class MazeController {
 
     @CrossOrigin(originPatterns = {
             "https://evaporatoronline.org",
-            "http://docker:808",
+            "http://docker:80",
+            "http://docker:81",
             "http://localhost:8080",
             "http://127.0.0.1:5500"
     })
@@ -191,7 +193,8 @@ public class MazeController {
 
     @CrossOrigin(originPatterns = {
             "https://evaporatoronline.org",
-            "http://docker:808",
+            "http://docker:80",
+            "http://docker:81",
             "http://localhost:8080",
             "http://127.0.0.1:5500"
     })
