@@ -80,11 +80,12 @@ public class MazeController {
                 .body(output.toByteArray());
     }
 
-    @CrossOrigin(origins = {
+    @CrossOrigin(originPatterns = {
             "https://evaporatoronline.org",
             "http://docker:808",
             "http://localhost:8080",
-            "http://127.0.0.1:5500"})
+            "http://127.0.0.1:5500"
+    })
     @PostMapping(value = "/solve", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> MazeSolve(@RequestParam("image") MultipartFile image, @RequestParam String Start,
                                        @RequestParam String End, @RequestParam String Algorithm) throws IOException {
@@ -188,11 +189,12 @@ public class MazeController {
                 .body(output.toByteArray());
     }
 
-    @CrossOrigin(origins = {
+    @CrossOrigin(originPatterns = {
             "https://evaporatoronline.org",
             "http://docker:808",
             "http://localhost:8080",
-            "http://127.0.0.1:5500"})
+            "http://127.0.0.1:5500"
+    })
     @GetMapping(value = "/background")
     public ResponseEntity<?> backgroundGen(
             @RequestParam int screenWidth,
